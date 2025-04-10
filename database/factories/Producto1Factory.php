@@ -17,7 +17,10 @@ class Producto1Factory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nombre'=>fake()->word(),
+            'descripcion'=>fake()->text(),
+            'precio'=>fake()->numberBetween(10000,1000000),
+            'cantidad'=>fake()->numberBetween(1,50),
         ];
     }
 }

@@ -12,7 +12,10 @@ class Producto1Controller extends Controller
      */
     public function index()
     {
-        //
+        // $producto1s=Producto1::all();
+        $producto1s=Producto1::orderBy('nombre')->get();
+        // return view('welcome',['producto1s' => $producto1s]);
+        return view('productos.index',['producto1s' => $producto1s]);
     }
 
     /**
@@ -20,7 +23,7 @@ class Producto1Controller extends Controller
      */
     public function create()
     {
-        //
+        return view('productos.create');
     }
 
     /**
@@ -28,7 +31,13 @@ class Producto1Controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Producto1::create($request->all());
+        //Guardar imagen
+        $producto = Producto1::latest('id')->first();
+        $imageName= 'producto_'.$producto->id.'.'.$request->imagen->extension();
+        $request->imagen->move(public_path('images/productos'), $imageName);
+        return redirect()->route('producto1s.index')->with('info', 'Producto creado con éxito');
+        // return redirect()->route('productos.index');
     }
 
     /**
@@ -44,7 +53,7 @@ class Producto1Controller extends Controller
      */
     public function edit(Producto1 $producto1)
     {
-        //
+        return view('productos.edit', compact('producto1'));
     }
 
     /**
@@ -52,7 +61,8 @@ class Producto1Controller extends Controller
      */
     public function update(Request $request, Producto1 $producto1)
     {
-        //
+        producto1::update($request->all());
+        return redirect()->route('producto1s.index');
     }
 
     /**
@@ -60,6 +70,8 @@ class Producto1Controller extends Controller
      */
     public function destroy(Producto1 $producto1)
     {
-        //
+        $producto1->delete();
+        return redirect()->route('producto1s.index')->with('info', 'producto eliminado con éxito');;
+
     }
 }
